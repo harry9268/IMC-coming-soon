@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMC Partners — Coming Soon</title>
+    <meta name="description" content="IMC Partners LLC — Global Trade & Investment Advisory. Launching soon.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0a0f1a;
+            --bg2: #0f1626;
+            --blue: #3b82f6;
+            --blue-dim: rgba(59,130,246,0.15);
+            --blue-border: rgba(59,130,246,0.25);
+            --white: #e2e8f0;
+            --muted: #475569;
+            --glass: rgba(15,22,38,0.8);
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--white);
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: -0.01em;
+        }
+
+        /* ── CANVAS DE FONDO ── */
+        canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ── GRADIENTES ── */
+        .bg-radial {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 60% 50% at 80% 20%, rgba(59,130,246,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 60% at 10% 80%, rgba(29,78,216,0.10) 0%, transparent 55%),
+                radial-gradient(ellipse 80% 40% at 50% 50%, rgba(15,23,42,0.6) 0%, transparent 80%);
+        }
+
+        /* ── LAYOUT ── */
+        .page {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 36px 48px;
+        }
+
+        /* ── HEADER ── */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: fadeDown 0.8s ease both;
+        }
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        /* Logo SVG inline que replica el ICM Partners */
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+        .logo-main {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #fff;
+        }
+        .logo-sub {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--blue);
+            margin-top: 2px;
+        }
+
+        .header-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--blue-border);
+            border-radius: 100px;
+            padding: 7px 16px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--blue);
+            background: var(--blue-dim);
+        }
+        .pulse-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--blue);
+            animation: blink 1.8s ease infinite;
+        }
+        @keyframes blink {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.7); }
+        }
+
+        /* ── CENTRO ── */
+        .center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0;
+        }
+
+        .eyebrow {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--blue);
+            margin-bottom: 28px;
+            animation: fadeUp 0.8s 0.1s ease both;
+        }
+
+        .headline {
+            font-size: clamp(44px, 7vw, 88px);
+            font-weight: 700;
+            line-height: 0.95;
+            letter-spacing: -0.04em;
+            margin-bottom: 24px;
+            animation: fadeUp 0.8s 0.2s ease both;
+        }
+        .headline .grad {
+            background: linear-gradient(to right, #ffffff 20%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .headline .light {
+            font-weight: 300;
+            color: rgba(255,255,255,0.35);
+        }
+
+        .subline {
+            font-size: clamp(13px, 1.4vw, 16px);
+            font-weight: 300;
+            color: #64748b;
+            max-width: 480px;
+            line-height: 1.7;
+            margin-bottom: 52px;
+            animation: fadeUp 0.8s 0.3s ease both;
+        }
+
+        /* ── BARRA DE PROGRESO ── */
+        .progress-wrap {
+            width: clamp(280px, 40vw, 480px);
+            animation: fadeUp 0.8s 0.4s ease both;
+            margin-bottom: 40px;
+        }
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+        .progress-track {
+            width: 100%;
+            height: 3px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, #1d4ed8, #3b82f6, #60a5fa);
+            border-radius: 100px;
+            transition: width 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 0 12px rgba(59,130,246,0.6);
+        }
+
+        /* ── EMAIL ── */
+        .contact-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: fadeUp 0.8s 0.5s ease both;
+        }
+        .contact-label {
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 600;
+        }
+        .contact-sep {
+            width: 1px;
+            height: 14px;
+            background: rgba(255,255,255,0.1);
+        }
+        .contact-email {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--blue);
+            text-decoration: none;
+            letter-spacing: 0.01em;
+            transition: color 0.2s;
+        }
+        .contact-email:hover { color: #fff; }
+
+        /* ── FOOTER ── */
+        footer {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            animation: fadeDown 0.8s 0.6s ease both;
+        }
+
+        .locations {
+            display: flex;
+            gap: 24px;
+        }
+        .loc {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .loc-region {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--blue);
+        }
+        .loc-city {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            font-weight: 400;
+        }
+
+        .footer-legal {
+            font-size: 9px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.12);
+            text-align: right;
+            line-height: 1.8;
+        }
+
+        /* ── LÍNEAS DECORATIVAS ── */
+        .line-h {
+            position: fixed;
+            left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(59,130,246,0.15), transparent);
+            pointer-events: none;
+            z-index: 5;
+        }
+        .line-h.top { top: 90px; }
+        .line-h.bottom { bottom: 90px; }
+
+        .line-v {
+            position: fixed;
+            top: 0; bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, rgba(59,130,246,0.1), transparent);
+            pointer-events: none;
+            z-index: 5;
+        }
+        .line-v.left { left: 48px; }
+        .line-v.right { right: 48px; }
+
+        /* ── COUNTER ── */
+        .counters {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            animation: fadeUp 0.8s 0.55s ease both;
+            margin-bottom: 20px;
+        }
+        .counter-item {
+            text-align: center;
+        }
+        .counter-num {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            color: #fff;
+            line-height: 1;
+        }
+        .counter-num span { color: var(--blue); }
+        .counter-label {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+        .counter-sep {
+            width: 1px;
+            height: 36px;
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* ── ANIMACIONES ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── MOBILE ── */
+        @media (max-width: 640px) {
+            .page { padding: 24px 24px; overflow-y: auto; }
+            html, body { overflow: auto; }
+            .locations { display: none; }
+            .header-badge span { display: none; }
+            .counters { gap: 20px; }
+            .line-v { display: none; }
+            footer { justify-content: center; }
+            .footer-legal { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+<div class="bg-radial"></div>
+
+<!-- Líneas decorativas -->
+<div class="line-h top"></div>
+<div class="line-h bottom"></div>
+<div class="line-v left"></div>
+<div class="line-v right"></div>
+
+<div class="page">
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo-wrap">
+            <!-- Logo SVG inline (replica el estilo ICM/IMC) -->
+            <svg class="logo-icon" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#60a5fa"/>
+                        <stop offset="50%" stop-color="#94a3b8"/>
+                        <stop offset="100%" stop-color="#3b82f6"/>
+                    </linearGradient>
+                    <linearGradient id="lg2" x1="100%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#e2e8f0"/>
+                        <stop offset="100%" stop-color="#64748b"/>
+                    </linearGradient>
+                </defs>
+                <!-- Símbolo de doble espiral / infinito estilizado -->
+                <path d="M21 6 C14 6 8 10 8 16 C8 22 14 24 21 21 C28 18 34 20 34 26 C34 32 28 36 21 36 C14 36 8 32 8 26" 
+                      stroke="url(#lg1)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M21 36 C28 36 34 32 34 26 C34 20 28 18 21 21 C14 24 8 22 8 16 C8 10 14 6 21 6 C28 6 34 10 34 16" 
+                      stroke="url(#lg2)" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.6"/>
+                <circle cx="21" cy="21" r="2.5" fill="#3b82f6" opacity="0.8"/>
+            </svg>
+            <div class="logo-text">
+                <span class="logo-main">IMC</span>
+                <span class="logo-sub">Partners</span>
+            </div>
+        </div>
+
+        <div class="header-badge">
+            <div class="pulse-dot"></div>
+            <span>En Desarrollo · 2026</span>
+        </div>
+    </header>
+
+    <!-- CENTRO -->
+    <div class="center">
+        <div class="eyebrow">Global Trade &amp; Investment Advisory</div>
+
+        <h1 class="headline">
+            <span class="grad">Próximamente</span><br>
+            <span class="light">en línea</span>
+        </h1>
+
+        <p class="subline">
+            Estamos construyendo nuestra presencia digital. 
+            Mientras tanto, podemos atender su consulta directamente.
+        </p>
+
+        <div class="counters">
+            <div class="counter-item">
+                <div class="counter-num"><span class="cnum" data-target="4">0</span><span>+</span></div>
+                <div class="counter-label">Regiones</div>
+            </div>
+            <div class="counter-sep"></div>
+            <div class="counter-item">
+                <div class="counter-num"><span class="cnum" data-target="3">0</span></div>
+                <div class="counter-label">Verticales</div>
+            </div>
+            <div class="counter-sep"></div>
+            <div class="counter-item">
+                <div class="counter-num"><span class="cnum" data-target="50">0</span><span>k+</span></div>
+                <div class="counter-label">Ton. Gestionadas</div>
+            </div>
+        </div>
+
+        <div class="progress-wrap">
+            <div class="progress-meta">
+                <span>Desarrollo Web</span>
+                <span id="pct">0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="pbar"></div>
+            </div>
+        </div>
+
+        <div class="contact-row">
+            <span class="contact-label">Contacto</span>
+            <div class="contact-sep"></div>
+            <a href="mailto:imc.partners@gmx.com" class="contact-email">imc.partners@gmx.com</a>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="locations">
+            <div class="loc">
+                <span class="loc-region">América</span>
+                <span class="loc-city">Miami, USA</span>
+            </div>
+            <div class="loc">
+                <span class="loc-region">Europa</span>
+                <span class="loc-city">España</span>
+            </div>
+            <div class="loc">
+                <span class="loc-region">África</span>
+                <span class="loc-city">West Africa</span>
+            </div>
+            <div class="loc">
+                <span class="loc-region">Oriente Medio</span>
+                <span class="loc-city">Dubai, EAU</span>
+            </div>
+        </div>
+        <div class="footer-legal">
+            IMC Partners LLC · EIN 32-0827849<br>
+            407 Lincoln RD STE 708 · Miami Beach · FL 33139
+        </div>
+    </footer>
+
+</div>
+
+<script>
+// ── PARTÍCULAS / GRID ANIMADO ──
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W, H, nodes = [], animId;
+
+function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Node {
+    constructor() { this.reset(); }
+    reset() {
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.r = Math.random() * 1.5 + 0.5;
+        this.alpha = Math.random() * 0.5 + 0.1;
+    }
+    update() {
+        this.x += this.vx; this.y += this.vy;
+        if (this.x < 0 || this.x > W) this.vx *= -1;
+        if (this.y < 0 || this.y > H) this.vy *= -1;
+    }
+}
+
+const COUNT = Math.min(60, Math.floor(W * H / 20000));
+for (let i = 0; i < COUNT; i++) nodes.push(new Node());
+
+function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Conexiones
+    for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+            const dx = nodes[i].x - nodes[j].x;
+            const dy = nodes[i].y - nodes[j].y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 140) {
+                const opacity = (1 - dist / 140) * 0.18;
+                ctx.beginPath();
+                ctx.moveTo(nodes[i].x, nodes[i].y);
+                ctx.lineTo(nodes[j].x, nodes[j].y);
+                ctx.strokeStyle = `rgba(59,130,246,${opacity})`;
+                ctx.lineWidth = 0.8;
+                ctx.stroke();
+            }
+        }
+    }
+
+    // Nodos
+    nodes.forEach(n => {
+        n.update();
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(59,130,246,${n.alpha})`;
+        ctx.fill();
+    });
+
+    animId = requestAnimationFrame(draw);
+}
+draw();
+
+// ── BARRA DE PROGRESO ──
+const PROGRESS = 72; // % real de avance del proyecto — cambia este número
+setTimeout(() => {
+    document.getElementById('pbar').style.width = PROGRESS + '%';
+    let cur = 0;
+    const step = () => {
+        if (cur < PROGRESS) {
+            cur = Math.min(cur + 1, PROGRESS);
+            document.getElementById('pct').textContent = cur + '%';
+            requestAnimationFrame(step);
+        }
+    };
+    step();
+}, 600);
+
+// ── CONTADORES ──
+function animateCounters() {
+    document.querySelectorAll('.cnum').forEach(el => {
+        const target = +el.dataset.target;
+        let cur = 0;
+        const duration = 1800;
+        const start = performance.now();
+        const tick = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const ease = 1 - Math.pow(1 - progress, 3);
+            cur = Math.round(ease * target);
+            el.textContent = cur;
+            if (progress < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+    });
+}
+setTimeout(animateCounters, 400);
+</script>
+</body>
+</html>
